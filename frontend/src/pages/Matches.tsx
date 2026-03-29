@@ -393,10 +393,13 @@ function SwipeCard({ profile, onSwipe, onViewProfile, swipeDir }: SwipeCardProps
                 onClick={onViewProfile}
             >
                 {/* Avatar area */}
-                <div className="h-[45%] bg-[#080808] relative flex items-center justify-center border-b border-white/5">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                <div className="h-[45%] bg-[#080808] relative flex items-center justify-center border-b border-white/5 overflow-hidden">
+                    {profile.cover_url && (
+                        <img src={profile.cover_url} alt="Cover" className="absolute inset-0 w-full h-full object-cover opacity-60 z-0 pointer-events-none" />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#050505]/60 to-transparent z-0 pointer-events-none" />
                     
-                    <div className="h-32 w-32 rounded-full bg-[#111111] border-2 border-orange-500/20 shadow-[0_0_30px_rgba(255,107,0,0.15)] flex items-center justify-center text-5xl font-black z-10 select-none overflow-hidden">
+                    <div className="h-32 w-32 rounded-full bg-[#111111] border-2 border-orange-500/20 shadow-[0_0_30px_rgba(255,107,0,0.15)] flex items-center justify-center text-5xl font-black z-10 select-none overflow-hidden relative">
                         {profile.avatar_url ? (
                            <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
                         ) : (

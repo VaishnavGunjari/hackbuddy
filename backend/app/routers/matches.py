@@ -27,7 +27,7 @@ def get_potential_matches(
 
     # Fetch all profiles 
     profiles_res = supabase.table("profiles").select(
-        "id, full_name, bio, skills, college, experience_level, hackathon_interests, avatar_url, github_url, linkedin_url"
+        "id, full_name, bio, skills, college, experience_level, hackathon_interests, avatar_url, cover_url, github_url, linkedin_url"
     ).execute()
     
     all_profiles = profiles_res.data or []

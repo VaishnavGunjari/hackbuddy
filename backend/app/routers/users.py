@@ -86,7 +86,7 @@ async def upload_cover(
     supabase: Client = Depends(get_supabase)
 ):
     """Upload user cover photo and update profile."""
-    url = await handle_image_upload(supabase, current_user["sub"], "covers", file)
+    url = await handle_image_upload(supabase, current_user["sub"], "avatars", file)
     result = supabase.table("profiles").update({"cover_url": url}).eq("id", current_user["sub"]).execute()
     user = result.data[0]
     user.pop("password_hash", None)

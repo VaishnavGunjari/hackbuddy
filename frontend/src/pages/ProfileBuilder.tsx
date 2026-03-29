@@ -197,7 +197,7 @@ export default function ProfileBuilder() {
               type="button"
               onClick={() => coverInputRef.current?.click()}
               disabled={coverUploading}
-              className="absolute bottom-6 right-6 flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#111]/80 backdrop-blur-md border border-white/10 text-white text-sm font-bold hover:bg-orange-500 hover:border-orange-500 transition-all opacity-0 group-hover:opacity-100 z-30 disabled:opacity-50"
+              className="absolute bottom-20 right-6 flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#111]/80 backdrop-blur-md border border-white/10 text-white text-sm font-bold hover:bg-orange-500 hover:border-orange-500 transition-all opacity-0 group-hover:opacity-100 z-50 disabled:opacity-50"
             >
               {coverUploading
                 ? <Loader2 className="h-4 w-4 animate-spin" />

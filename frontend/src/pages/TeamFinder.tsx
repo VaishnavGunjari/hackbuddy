@@ -92,7 +92,7 @@ export default function TeamFinder() {
       
       <main className="md:ml-64 flex-1 p-6 md:p-8 relative z-10">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 pr-16 md:pr-20">
           <div>
             <h1 className="text-4xl font-bold text-white tracking-tight">Directory</h1>
             <p className="text-zinc-500 text-sm mt-1 font-medium">Discover top-tier teams and builders autonomously.</p>

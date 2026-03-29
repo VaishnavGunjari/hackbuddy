@@ -383,6 +383,58 @@ async def accept_team_invite(
     return {"message": "Successfully joined the team."}
 
 
+@router.post("/{team_id}/leave")
+async def leave_team(
+    team_id: str,
+    current_user: dict = Depends(get_current_user),
+    supabase: Client = Depends(get_supabase)
+):
+    """Leave a team (members only). Notifies the team leader."""
+    user_id = current_user["sub"]
+
+    # 1. Fetch user role
+    role_res = supabase.table("team_members").select("role").match({
+        "team_id": team_id,
+        "user_id": user_id
+    }).execute()
+
+    if not role_res.data:
+        raise HTTPException(status_code=400, detail="You are not a member of this team.")
+    
+    user_role = role_res.data[0]["role"]
+    if user_role == "leader":
+        raise HTTPException(status_code=400, detail="Team leaders cannot leave. Please delete the team instead.")
+
+    # 2. Get leader ID and Team Name
+    team_res = supabase.table("teams").select("name, created_by").eq("id", team_id).execute()
+    if not team_res.data:
+        raise HTTPException(status_code=404, detail="Team not found.")
+    
+    team_name = team_res.data[0]["name"]
+    leader_id = team_res.data[0]["created_by"]
+
+    # 3. Get leaving user's name
+    user_res = supabase.table("profiles").select("full_name").eq("id", user_id).execute()
+    user_name = user_res.data[0]["full_name"] if user_res.data else "A member"
+
+    # 4. Remove from team_members
+    supabase.table("team_members").delete().match({
+        "team_id": team_id,
+        "user_id": user_id
+    }).execute()
+
+    # 5. Notify the leader
+    if leader_id != user_id:
+        supabase.table("notifications").insert({
+            "user_id": leader_id,
+            "type": "member_left",
+            "content": f"{user_name} leaves {team_name} team",
+            "related_id": team_id
+        }).execute()
+
+    return {"message": "You have successfully left the team."}
+
+
 # ─── Helper ───────────────────────────────────────────────────────────────────
 def _require_team_leader(team_id: str, user_id: str, supabase: Client):
     """Raise 403 if the user is not a leader of the given team."""

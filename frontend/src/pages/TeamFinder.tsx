@@ -102,7 +102,7 @@ export default function TeamFinder() {
             className="flex items-center gap-2 px-6 py-3 btn-primary shadow-[0_5px_20px_rgba(255,107,0,0.2)] hover:scale-105"
           >
             <Plus className="h-4 w-4" />
-            <span className="hidden sm:inline">Initialize Team</span>
+            <span className="hidden sm:inline">Create Team</span>
             <span className="sm:hidden">Create</span>
           </button>
         </div>
@@ -196,7 +196,7 @@ export default function TeamFinder() {
                         disabled={joinLoading === team.id}
                         className="flex-1 py-2.5 text-sm btn-primary rounded-full transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                       >
-                        {joinLoading === team.id ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Request Access'}
+                        {joinLoading === team.id ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Request to Join'}
                       </button>
                     )}
                   </div>
@@ -207,7 +207,7 @@ export default function TeamFinder() {
               <div className="col-span-3 surface-card p-16 text-center shadow-none bg-[#0a0a0a]">
                 <Sparkles className="h-10 w-10 mx-auto mb-4 text-zinc-700" />
                 <p className="text-lg font-bold text-white mb-2">No active teams found</p>
-                <p className="text-sm text-zinc-500">Be the first to initialize a team and start recruiting.</p>
+                <p className="text-sm text-zinc-500">Be the first to create a team and start recruiting.</p>
               </div>
             )}
           </div>
@@ -290,7 +290,7 @@ export default function TeamFinder() {
             <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <motion.div initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 20 }} className="surface-card p-8 w-full max-w-lg">
                 <div className="flex items-center justify-between mb-8">
-                  <h2 className="text-2xl font-bold text-white tracking-tight">Initialize Team</h2>
+                  <h2 className="text-2xl font-bold text-white tracking-tight">Create Team</h2>
                   <button onClick={() => setShowCreate(false)} className="w-8 h-8 rounded-full bg-[#161616] border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-orange-500 hover:border-orange-500 transition-all"><X className="h-4 w-4" /></button>
                 </div>
                 <form onSubmit={handleCreateTeam} className="space-y-5">
@@ -324,7 +324,7 @@ export default function TeamFinder() {
                     </select>
                   </div>
                   <button type="submit" disabled={creating} className="w-full py-4 mt-4 btn-primary rounded-xl flex items-center justify-center gap-2 text-base shadow-[0_5px_20px_rgba(255,107,0,0.3)] disabled:opacity-50">
-                    {creating ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Execute Initialization'}
+                    {creating ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Create Team'}
                   </button>
                 </form>
               </motion.div>

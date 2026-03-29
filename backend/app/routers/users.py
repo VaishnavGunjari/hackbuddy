@@ -111,6 +111,22 @@ async def get_user_profile(
     return user
 
 
+# Names that indicate a test / demo / placeholder account (case-insensitive, exact match)
+TEST_NAMES: set[str] = {
+    "test", "test rls", "test user", "demo", "demo user",
+    "admin", "administrator", "placeholder", "fake", "example",
+    "user", "guest", "temp", "sample",
+}
+
+
+def _is_real_user(user: dict) -> bool:
+    """Return False for obviously fake / test profiles."""
+    name = (user.get("full_name") or "").strip()
+    if not name:
+        return False
+    return name.lower() not in TEST_NAMES
+
+
 @router.get("/", response_model=List[UserProfileResponse])
 async def search_users(
     skills: Optional[str] = Query(None, description="Comma-separated skill names, e.g. 'AI/ML,Backend'"),
@@ -122,10 +138,13 @@ async def search_users(
 ):
     """
     Search / filter users by skills, experience level, or college.
-    Useful for the Team Finder feature.
+    Useful for the Team Finder / Global Builders feature.
+    Test / demo accounts are excluded from results.
     """
-    query = supabase.table("profiles").select("id, full_name, college, skills, experience_level, hackathon_interests, bio, avatar_url, role")
-    
+    query = supabase.table("profiles").select(
+        "id, full_name, college, skills, experience_level, hackathon_interests, bio, avatar_url, role"
+    )
+
     if college:
         query = query.ilike("college", f"%{college}%")
     if experience:
@@ -133,6 +152,9 @@ async def search_users(
 
     result = query.neq("id", current_user["sub"]).limit(limit).execute()
     users = result.data or []
+
+    # Strip out test / demo accounts
+    users = [u for u in users if _is_real_user(u)]
 
     # Filter by skills in Python (Supabase array containment is tricky via REST)
     if skills:

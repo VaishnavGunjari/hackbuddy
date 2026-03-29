@@ -336,7 +336,7 @@ export default function TeamDetail() {
                 )}
 
                 {/* Suggested Members */}
-                {suggestions.length > 0 && (
+                {isLeader && suggestions.length > 0 && (
                   <section className="bg-zinc-900/80 border border-white/10 rounded-2xl p-5">
                     <h2 className="font-semibold mb-4 flex items-center gap-2">
                       <Sparkles className="h-4 w-4 text-amber-400" /> Suggested for Your Team

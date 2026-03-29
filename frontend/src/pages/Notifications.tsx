@@ -55,7 +55,7 @@ function getNotifMeta(notif: Notification): NotifMeta {
                 icon: <Heart className="h-5 w-5 text-pink-400 fill-current" />,
                 color: 'bg-pink-500/10 ring-pink-500/20',
                 label: 'Liked You',
-                navigateTo: () => '/matches',
+                navigateTo: (n) => n.related_id ? `/matches?highlight=${n.related_id}` : '/matches',
                 relatedIsUser: true,
             };
         case 'match':

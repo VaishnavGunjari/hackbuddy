@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import type { PanInfo } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import ProfileModal from '../components/ProfileModal';
-import { matchesApi, type UserProfile } from '../lib/api';
+import { matchesApi, usersApi, type UserProfile } from '../lib/api';
 import {
     X, Heart, Undo2, Loader2, Github, Linkedin,
     GraduationCap, Zap, Code2, RefreshCw, Sparkles
@@ -28,18 +29,43 @@ export default function Matches() {
     const [skillFilter, setSkillFilter] = useState('');
     const [expFilter, setExpFilter] = useState('');
     const [showFilters, setShowFilters] = useState(false);
+    const [highlightedId, setHighlightedId] = useState<string | null>(null);
     const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        loadQueue();
+        const highlightId = searchParams.get('highlight');
+        loadQueue(highlightId || undefined);
+        // Clear the highlight param from the URL so a refresh doesn't re-trigger
+        if (highlightId) {
+            setHighlightedId(highlightId);
+            setSearchParams({}, { replace: true });
+        }
         return () => { if (toastTimer.current) clearTimeout(toastTimer.current); };
     }, []);
 
-    const loadQueue = async () => {
+    const loadQueue = async (prependId?: string) => {
         setLoading(true);
         try {
             const data = await matchesApi.potential();
-            setQueue(data);
+            if (prependId) {
+                // Try to front-load the highlighted profile
+                const alreadyIn = data.some((p) => p.id === prependId);
+                if (alreadyIn) {
+                    // Move to front
+                    setQueue([...data.filter((p) => p.id === prependId), ...data.filter((p) => p.id !== prependId)]);
+                } else {
+                    // Not in potential list (already swiped etc.) — fetch directly and prepend
+                    try {
+                        const highlighted = await usersApi.getUser(prependId);
+                        setQueue([highlighted, ...data]);
+                    } catch {
+                        setQueue(data);
+                    }
+                }
+            } else {
+                setQueue(data);
+            }
         } catch (err) {
             console.error(err);
         } finally {
@@ -132,6 +158,20 @@ export default function Matches() {
 
                 {/* Header */}
                 <div className="text-center mb-6 z-10 relative w-full max-w-sm">
+                    {/* Highlighted-profile banner */}
+                    <AnimatePresence>
+                        {highlightedId && queue[0]?.id === highlightedId && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10, height: 0 }}
+                                animate={{ opacity: 1, y: 0, height: 'auto' }}
+                                exit={{ opacity: 0, y: -10, height: 0 }}
+                                className="mb-3 flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-300 text-xs font-bold"
+                            >
+                                <Heart className="h-3.5 w-3.5 fill-current" />
+                                Liked your profile · Swipe right to match!
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                     <div className="flex items-center justify-between mb-2">
                         <h1 className="text-3xl font-bold flex items-center gap-2 tracking-tight">
                             <Zap className="h-7 w-7 text-orange-500" />
@@ -153,7 +193,7 @@ export default function Matches() {
                                 <Zap className="h-3.5 w-3.5" /> Filters
                             </button>
                             <button
-                                onClick={loadQueue}
+                                onClick={() => loadQueue()}
                                 className="h-10 w-10 flex items-center justify-center rounded-full border border-white/5 bg-[#111111] text-zinc-400 hover:text-white hover:border-white/20 transition-colors"
                                 title="Refresh pool"
                             >
@@ -224,7 +264,7 @@ export default function Matches() {
                             <p className="text-zinc-500 text-sm mb-6 leading-relaxed">
                                 You've reviewed all available candidates in your area.<br />Adjust filters or check back later.
                             </p>
-                            <Button onClick={loadQueue} className="btn-primary rounded-full px-8 py-2">
+                            <Button onClick={() => loadQueue()} className="btn-primary rounded-full px-8 py-2">
                                 <RefreshCw className="h-4 w-4 mr-2" /> Reload Database
                             </Button>
                         </motion.div>

@@ -10,32 +10,47 @@ import {
     Search,
     Shield,
     Bell,
+    Users,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { notificationsApi } from '../lib/api';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export default function Sidebar() {
     const location = useLocation();
     const navigate = useNavigate();
     const { user, logout } = useAuth();
-    const [unreadCount, setUnreadCount] = useState(0);
+    const [unreadNotifCount, setUnreadNotifCount] = useState(0);
+    const [unreadChatCount, setUnreadChatCount] = useState(0);
+
+    const fetchCounts = useCallback(async () => {
+        if (!user) return;
+        try {
+            const [notifs, chatRes] = await Promise.all([
+                notificationsApi.list(),
+                fetch(
+                    `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/chat/unread-count`,
+                    { headers: { Authorization: `Bearer ${localStorage.getItem('hackmate_token')}` } }
+                ).then(r => r.ok ? r.json() : { unread_count: 0 }),
+            ]);
+            setUnreadNotifCount(notifs.filter(n => !n.is_read).length);
+            setUnreadChatCount(chatRes.unread_count || 0);
+        } catch { /* silent */ }
+    }, [user]);
 
     useEffect(() => {
-        if (user) {
-            notificationsApi.list()
-                .then(data => setUnreadCount(data.filter(n => !n.is_read).length))
-                .catch(console.error);
-        }
-    }, [user, location.pathname]); // refetch when changing pages
+        fetchCounts();
+        const interval = setInterval(fetchCounts, 30_000);
+        return () => clearInterval(interval);
+    }, [fetchCounts, location.pathname]);
 
     const menuItems = [
         { icon: LayoutGrid, label: 'Dashboard', path: '/dashboard' },
         { icon: Search, label: 'Find Teams', path: '/teams' },
         { icon: Zap, label: 'Matches', path: '/matches' },
-        { icon: Bell, label: 'Notifications', path: '/notifications', badge: unreadCount },
-        { icon: MessageSquare, label: 'Chat', path: '/chat' },
+        { icon: Users, label: 'Friends', path: '/friends' },
+        { icon: MessageSquare, label: 'Chat', path: '/chat', badge: unreadChatCount },
         { icon: User, label: 'Profile', path: '/profile' },
     ];
 
@@ -49,27 +64,31 @@ export default function Sidebar() {
     };
 
     return (
+        <>
         <motion.div
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            className="fixed top-0 left-0 h-screen w-64 bg-black border-r border-white/10 hidden md:flex flex-col z-40"
+            className="fixed top-0 left-0 h-screen w-64 bg-[#0a0a0a] border-r border-white/5 hidden md:flex flex-col z-40"
         >
             {/* Logo */}
-            <div className="h-20 flex items-center px-8 border-b border-white/5">
-                <Link to="/" className="flex items-center gap-2 font-bold text-lg text-white hover:opacity-80 transition-opacity">
-                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
+            <div className="h-24 flex items-center px-8">
+                <Link to="/" className="flex items-center gap-2 font-bold text-xl text-white hover:text-orange-500 transition-colors">
+                    <div className="h-8 w-8 rounded-lg bg-orange-600 flex items-center justify-center glow-sm-orange">
                         <Code2 className="h-5 w-5 text-white" />
                     </div>
-                    HackMate
+                    <span className="font-bold tracking-tight">HackMate</span>
                 </Link>
             </div>
 
             {/* User info */}
             {user && (
-                <div className="px-4 py-4 border-b border-white/5">
-                    <div className="flex items-center gap-3 px-2">
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center font-bold text-sm shrink-0">
-                            {user.full_name?.[0] || '?'}
+                <div className="px-6 pb-6">
+                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-[#111111] border border-white/5">
+                        <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden ring-2 ring-orange-500/20">
+                            {user.avatar_url
+                                ? <img src={user.avatar_url} alt={user.full_name} className="w-full h-full object-cover" />
+                                : (user.full_name?.[0] || '?')
+                            }
                         </div>
                         <div className="min-w-0">
                             <p className="text-sm font-semibold text-white truncate">{user.full_name}</p>
@@ -80,25 +99,22 @@ export default function Sidebar() {
             )}
 
             {/* Navigation */}
-            <div className="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
+            <div className="flex-1 py-4 px-4 space-y-1.5 overflow-y-auto">
                 {menuItems.map((item) => {
                     const isActive = location.pathname.startsWith(item.path);
                     return (
                         <Link to={item.path} key={item.path}>
                             <div className={`
-                                relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
-                                ${isActive ? 'bg-white/10 text-white' : 'text-zinc-500 hover:text-zinc-200 hover:bg-white/5'}
+                                relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 group
+                                ${isActive
+                                    ? 'bg-[#181818] text-white border border-white/10'
+                                    : 'text-zinc-500 hover:text-white hover:bg-white/5 border border-transparent'
+                                }
                             `}>
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="activeTab"
-                                        className="absolute left-0 w-1 h-7 bg-purple-500 rounded-r-full"
-                                    />
-                                )}
-                                <item.icon className={`h-5 w-5 ${isActive ? 'text-purple-400' : 'text-zinc-500 group-hover:text-zinc-300'}`} />
-                                <span className="font-medium">{item.label}</span>
+                                <item.icon className={`h-5 w-5 transition-colors duration-300 ${isActive ? 'text-orange-500 drop-shadow-[0_0_8px_rgba(255,107,0,0.8)]' : 'text-zinc-600 group-hover:text-zinc-400'}`} />
+                                <span className="font-semibold text-sm tracking-wide">{item.label}</span>
                                 {item.badge !== undefined && item.badge > 0 && (
-                                    <span className="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                                    <span className="ml-auto bg-orange-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(255,107,0,0.4)]">
                                         {item.badge}
                                     </span>
                                 )}
@@ -109,15 +125,33 @@ export default function Sidebar() {
             </div>
 
             {/* Bottom Actions */}
-            <div className="p-4 border-t border-white/5">
+            <div className="p-6">
                 <button
                     onClick={handleSignOut}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-500/70 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-full text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors border border-transparent"
                 >
                     <LogOut className="h-5 w-5" />
-                    <span className="font-medium">Sign Out</span>
+                    <span className="font-semibold text-sm">Sign Out</span>
                 </button>
             </div>
         </motion.div>
+
+        {/* Top Right Floating Notifications */}
+        {user && (
+            <div className="fixed top-6 right-8 z-50">
+                <Link
+                    to="/notifications"
+                    className="relative flex items-center justify-center p-3 rounded-full bg-[#111111] border border-white/10 text-white hover:border-white/30 transition-all shadow-lg hover:scale-105"
+                >
+                    <Bell className="h-6 w-6 text-zinc-400" />
+                    {unreadNotifCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-[11px] font-bold min-w-[22px] h-[22px] rounded-full flex items-center justify-center px-1 border-2 border-[#000000] shadow-[0_0_10px_rgba(255,107,0,0.4)]">
+                            {unreadNotifCount > 99 ? '99+' : unreadNotifCount}
+                        </span>
+                    )}
+                </Link>
+            </div>
+        )}
+        </>
     );
 }

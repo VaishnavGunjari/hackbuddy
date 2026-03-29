@@ -15,9 +15,12 @@ async function request<T>(
   body?: unknown,
   authenticated = true
 ): Promise<T> {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
+  const headers: Record<string, string> = {};
+  const isFormData = body instanceof FormData;
+
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   if (authenticated) {
     const token = getToken();
@@ -27,7 +30,7 @@ async function request<T>(
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     method,
     headers,
-    body: body !== undefined ? JSON.stringify(body) : undefined,
+    body: isFormData ? body : body !== undefined ? JSON.stringify(body) : undefined,
   });
 
   if (!res.ok) {
@@ -53,6 +56,16 @@ export const usersApi = {
   getMe: () => request<UserProfile>('GET', '/users/me'),
   updateMe: (data: Partial<UserProfile>) => request<UserProfile>('PUT', '/users/me', data),
   getUser: (id: string) => request<UserProfile>('GET', `/users/${id}`),
+  uploadAvatar: (file: File) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return request<UserProfile>('POST', '/users/me/avatar', fd);
+  },
+  uploadCover: (file: File) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return request<UserProfile>('POST', '/users/me/cover', fd);
+  },
   searchUsers: (params: { skills?: string; experience?: string; college?: string }) => {
     const qs = new URLSearchParams(Object.entries(params).filter(([, v]) => v) as [string, string][]).toString();
     return request<UserProfile[]>('GET', `/users/?${qs}`);
@@ -66,11 +79,22 @@ export const teamsApi = {
   get: (id: string) => request<Team>('GET', `/teams/${id}`),
   create: (data: Partial<Team>) => request<Team>('POST', '/teams/', data),
   update: (id: string, data: Partial<Team>) => request<Team>('PUT', `/teams/${id}`, data),
+  delete: (id: string) => request('DELETE', `/teams/${id}`),
   requestJoin: (teamId: string) => request('POST', `/teams/${teamId}/request-join`),
   getJoinRequests: (teamId: string) => request<JoinRequest[]>('GET', `/teams/${teamId}/join-requests`),
   acceptRequest: (teamId: string, reqId: string) => request('POST', `/teams/${teamId}/join-requests/${reqId}/accept`),
   rejectRequest: (teamId: string, reqId: string) => request('POST', `/teams/${teamId}/join-requests/${reqId}/reject`),
   suggestMembers: (teamId: string) => request<UserProfile[]>('GET', `/teams/${teamId}/suggest-members`),
+  inviteMember: (teamId: string, targetUserId: string) => request('POST', `/teams/${teamId}/invite`, { target_user_id: targetUserId }),
+  acceptInvite: (teamId: string) => request('POST', `/teams/${teamId}/accept-invite`),
+};
+
+// ─── Matches ──────────────────────────────────────────────────────────────────
+export const matchesApi = {
+  potential: () => request<UserProfile[]>('GET', '/matches/potential'),
+  swipe: (target_user_id: string, action: 'like' | 'dislike') =>
+    request<{ message: string; match: boolean }>('POST', '/matches/swipe', { target_user_id, action }),
+  undo: (target_user_id: string) => request('DELETE', `/matches/undo/${target_user_id}`),
 };
 
 // ─── Chat ─────────────────────────────────────────────────────────────────────
@@ -111,6 +135,7 @@ export interface UserProfile {
   github_url?: string;
   linkedin_url?: string;
   avatar_url?: string;
+  cover_url?: string;
   role?: string;
   warning_count?: number;
   is_suspended?: boolean;
@@ -166,6 +191,35 @@ export const notificationsApi = {
   list: () => request<Notification[]>('GET', '/notifications/'),
   markAsRead: (id: string) => request<Notification>('PUT', `/notifications/${id}/read`),
   markAllAsRead: () => request<{ message: string }>('PUT', '/notifications/read-all'),
+};
+
+export interface FriendEntry {
+  id: string;
+  full_name: string;
+  email?: string;
+  avatar_url?: string;
+}
+
+export interface FriendRequest {
+  id: string;
+  requester_id: string;
+  receiver_id: string;
+  status: string;
+  is_incoming: boolean;
+  friend_profile?: {
+    id: string;
+    full_name: string;
+    email?: string;
+    avatar_url?: string;
+  };
+}
+
+export const friendsApi = {
+  list: () => request<FriendEntry[]>('GET', '/friends/'),
+  pending: () => request<FriendRequest[]>('GET', '/friends/pending'),
+  sendRequest: (userId: string) => request('POST', `/friends/request/${userId}`),
+  accept: (requestId: string) => request('POST', `/friends/requests/${requestId}/accept`),
+  reject: (requestId: string) => request('POST', `/friends/requests/${requestId}/reject`),
 };
 
 export interface Hackathon {

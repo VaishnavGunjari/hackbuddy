@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Matches from './pages/Matches';
+import Friends from './pages/Friends';
 import Chat from './pages/Chat';
 import Team from './pages/Team';
 import ProfileBuilder from './pages/ProfileBuilder';
@@ -17,7 +18,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center bg-black text-white">
-        <div className="animate-spin h-8 w-8 border-4 border-purple-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-orange-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -45,6 +46,7 @@ function App() {
           <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><ProfileBuilder /></ProtectedRoute>} />
           <Route path="/matches" element={<ProtectedRoute><Matches /></ProtectedRoute>} />
+          <Route path="/friends" element={<ProtectedRoute><Friends /></ProtectedRoute>} />
           <Route path="/teams" element={<ProtectedRoute><TeamFinder /></ProtectedRoute>} />
           <Route path="/team/:id" element={<ProtectedRoute><Team /></ProtectedRoute>} />
           <Route path="/chat/:teamId?" element={<ProtectedRoute><Chat /></ProtectedRoute>} />

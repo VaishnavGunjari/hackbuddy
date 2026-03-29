@@ -106,6 +106,18 @@ async def update_team(
     return result.data[0]
 
 
+@router.delete("/{team_id}", status_code=204)
+async def delete_team(
+    team_id: str,
+    current_user: dict = Depends(get_current_user),
+    supabase: Client = Depends(get_supabase)
+):
+    """Delete a team (leaders only)."""
+    _require_team_leader(team_id, current_user["sub"], supabase)
+    # The database should cascade delete team_members, join_requests, and messages
+    supabase.table("teams").delete().eq("id", team_id).execute()
+    return None
+
 @router.post("/{team_id}/request-join")
 async def request_to_join(
     team_id: str,
@@ -288,6 +300,87 @@ async def suggest_members(
 
     suggestions.sort(key=lambda x: x["match_score"], reverse=True)
     return suggestions[:20]
+
+
+@router.post("/{team_id}/invite")
+async def invite_member(
+    team_id: str,
+    target_user_id: str = Body(..., embed=True),
+    current_user: dict = Depends(get_current_user),
+    supabase: Client = Depends(get_supabase)
+):
+    """Invite a user to the team (leaders only). Sends a notification to the target user."""
+    _require_team_leader(team_id, current_user["sub"], supabase)
+    
+    team_info = supabase.table("teams").select("name").eq("id", team_id).execute()
+    team_name = team_info.data[0]["name"] if team_info.data else "A team"
+
+    notif = {
+        "id": str(uuid.uuid4()),
+        "user_id": target_user_id,
+        "type": "team_invite",
+        "content": f"You've been invited to join the team '{team_name}'.",
+        "related_id": team_id
+    }
+    supabase.table("notifications").insert(notif).execute()
+    return {"message": "Invitation sent successfully"}
+
+
+@router.post("/{team_id}/accept-invite")
+async def accept_team_invite(
+    team_id: str,
+    current_user: dict = Depends(get_current_user),
+    supabase: Client = Depends(get_supabase)
+):
+    """Accept a team invitation."""
+    user_id = current_user["sub"]
+    
+    # Verify the user has an invite notification
+    invite = supabase.table("notifications").select("id").match({
+        "user_id": user_id,
+        "type": "team_invite",
+        "related_id": team_id
+    }).execute()
+
+    if not invite.data:
+        raise HTTPException(status_code=403, detail="No invitation found for this team.")
+
+    # Check capacity 
+    team_res = supabase.table("teams").select("max_members").eq("id", team_id).execute()
+    if not team_res.data:
+        raise HTTPException(status_code=404, detail="Team not found.")
+    max_members = team_res.data[0]["max_members"]
+
+    count_res = supabase.table("team_members").select("team_id", count="exact").eq("team_id", team_id).execute()
+    if (count_res.count or 0) >= max_members:
+        raise HTTPException(status_code=400, detail="Team is already full.")
+
+    # Insert into team_members
+    existing = supabase.table("team_members").select("role").match({"team_id": team_id, "user_id": user_id}).execute()
+    if not existing.data:
+        supabase.table("team_members").insert({
+            "team_id": team_id,
+            "user_id": user_id,
+            "role": "member"
+        }).execute()
+    
+    # Mark invite as read
+    for inv in invite.data:
+        supabase.table("notifications").update({"is_read": True}).eq("id", inv["id"]).execute()
+
+    # Notify team leader
+    team = supabase.table("teams").select("created_by, name").eq("id", team_id).execute()
+    if team.data:
+        profile = supabase.table("profiles").select("full_name").eq("id", user_id).execute()
+        name = profile.data[0]["full_name"] if profile.data else "Someone"
+        supabase.table("notifications").insert({
+            "user_id": team.data[0]["created_by"],
+            "type": "request_accepted", 
+            "content": f"{name} accepted your invitation to join '{team.data[0]['name']}'.",
+            "related_id": team_id
+        }).execute()
+
+    return {"message": "Successfully joined the team."}
 
 
 # ─── Helper ───────────────────────────────────────────────────────────────────

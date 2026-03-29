@@ -44,6 +44,7 @@ class UserProfileBase(BaseModel):
     github_url: Optional[str] = None
     linkedin_url: Optional[str] = None
     avatar_url: Optional[str] = None
+    cover_url: Optional[str] = None
     role: str = "participant"
 
 class UserProfileCreate(UserProfileBase):
@@ -59,6 +60,7 @@ class UserProfileUpdate(BaseModel):
     github_url: Optional[str] = None
     linkedin_url: Optional[str] = None
     avatar_url: Optional[str] = None
+    cover_url: Optional[str] = None
 
 class UserProfileResponse(UserProfileBase):
     id: UUID
@@ -189,3 +191,33 @@ class WarnUserRequest(BaseModel):
 class SuspendUserRequest(BaseModel):
     user_id: UUID
     reason: str
+
+# ─── Friends ──────────────────────────────────────────────────────────────────
+class FriendRequestAction(BaseModel):
+    action: str  # e.g. "accept" or "reject"
+
+class FriendResponse(BaseModel):
+    id: UUID
+    requester_id: UUID
+    receiver_id: UUID
+    status: str
+    created_at: Optional[datetime] = None
+    friend_profile: Optional[dict] = None
+
+    class Config:
+        from_attributes = True
+
+class FriendMessageCreate(BaseModel):
+    receiver_id: UUID
+    content: str = Field(..., max_length=2000)
+
+class FriendMessageResponse(BaseModel):
+    id: UUID
+    sender_id: UUID
+    receiver_id: UUID
+    content: str
+    created_at: Optional[datetime] = None
+    sender_name: Optional[str] = None
+
+    class Config:
+        from_attributes = True

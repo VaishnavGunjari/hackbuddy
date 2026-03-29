@@ -55,6 +55,11 @@ def _build_ml_model():
         "Hello everyone, excited to join the team!",
         "Anyone familiar with FastAPI?",
         "Great idea, let's implement it",
+        "I can help with the database design",
+        "What time is the kickoff meeting?",
+        "Thanks for sharing the repository link",
+        "Let me know if you need help with testing",
+        "Just pushed my changes to the main branch",
         # Toxic
         "you idiot stop sending stupid messages",
         "this is trash code written by a moron",
@@ -74,15 +79,14 @@ def _build_ml_model():
         "what a bastard ass move",
         "damn this stupid piece of shit",
     ]
-    labels = [0]*10 + [1]*5 + [1]*5 + [1]*5  # 0=clean, 1=toxic/spam
+    labels = [0]*15 + [1]*5 + [1]*5 + [1]*5  # 0=clean, 1=toxic/spam
 
     model = Pipeline([
         ("tfidf", TfidfVectorizer(ngram_range=(1, 2), max_features=5000)),
-        ("clf", LogisticRegression(max_iter=1000, C=5.0))
+        ("clf", LogisticRegression(max_iter=1000, C=5.0, class_weight='balanced'))
     ])
     model.fit(texts, labels)
     return model
-
 
 def _get_model():
     """Load or create the moderation model (singleton)."""
@@ -104,7 +108,6 @@ def _get_model():
         pass
     return _cached_model
 
-
 def moderate_message(text: str) -> dict:
     """
     Checks a message for toxicity/spam.
@@ -124,7 +127,7 @@ def moderate_message(text: str) -> dict:
         model = _get_model()
         proba = model.predict_proba([text])[0]
         toxic_proba = float(proba[1])
-        is_toxic = toxic_proba >= 0.55
+        is_toxic = toxic_proba >= 0.70
         return {
             "is_toxic": is_toxic,
             "confidence": toxic_proba if is_toxic else 1 - toxic_proba,

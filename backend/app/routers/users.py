@@ -1,8 +1,9 @@
 """
 Users router: profile management, skill search, and teammate discovery.
 """
-from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi import APIRouter, HTTPException, Depends, Query, UploadFile, File
 from supabase import Client
+import uuid
 from typing import List, Optional
 from ..models.schemas import UserProfileUpdate, UserProfileResponse
 from ..core.database import get_supabase
@@ -32,10 +33,61 @@ async def update_my_profile(
     supabase: Client = Depends(get_supabase)
 ):
     """Update authenticated user's profile."""
-    data = profile_data.model_dump(exclude_none=True)
+    data = profile_data.model_dump(exclude_unset=True)
     result = supabase.table("profiles").update(data).eq("id", current_user["sub"]).execute()
     if not result.data:
         raise HTTPException(status_code=400, detail="Could not update profile")
+    user = result.data[0]
+    user.pop("password_hash", None)
+    return user
+
+
+async def handle_image_upload(supabase: Client, user_id: str, bucket: str, file: UploadFile) -> str:
+    ext = file.filename.split(".")[-1].lower()
+    if ext not in ["png", "jpg", "jpeg", "webp"]:
+        raise HTTPException(status_code=400, detail="Invalid file type. Only PNG, JPG, and WebP are allowed.")
+    
+    contents = await file.read()
+    if len(contents) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File too large. Maximum size is 5MB.")
+
+    file_path = f"{user_id}/{uuid.uuid4()}.{ext}"
+    
+    try:
+        supabase.storage.from_(bucket).upload(
+            file=contents,
+            path=file_path,
+            file_options={"content-type": file.content_type, "upsert": "true"}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to upload image: {str(e)}")
+        
+    return supabase.storage.from_(bucket).get_public_url(file_path)
+
+
+@router.post("/me/avatar", response_model=UserProfileResponse)
+async def upload_avatar(
+    file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user),
+    supabase: Client = Depends(get_supabase)
+):
+    """Upload user avatar and update profile."""
+    url = await handle_image_upload(supabase, current_user["sub"], "avatars", file)
+    result = supabase.table("profiles").update({"avatar_url": url}).eq("id", current_user["sub"]).execute()
+    user = result.data[0]
+    user.pop("password_hash", None)
+    return user
+
+
+@router.post("/me/cover", response_model=UserProfileResponse)
+async def upload_cover(
+    file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user),
+    supabase: Client = Depends(get_supabase)
+):
+    """Upload user cover photo and update profile."""
+    url = await handle_image_upload(supabase, current_user["sub"], "covers", file)
+    result = supabase.table("profiles").update({"cover_url": url}).eq("id", current_user["sub"]).execute()
     user = result.data[0]
     user.pop("password_hash", None)
     return user

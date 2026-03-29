@@ -66,19 +66,19 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="flex min-h-screen bg-black text-white">
+    <div className="flex min-h-screen premium-bg text-white font-[Space_Grotesk]">
       <Sidebar />
       <main className="md:ml-64 flex-1 p-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">Admin Panel</h1>
-          <p className="text-zinc-400 text-sm mt-1">Monitor and moderate community activity</p>
+          <h1 className="text-3xl font-bold text-white tracking-tight uppercase">Command Center</h1>
+          <p className="text-zinc-500 text-sm mt-1 font-medium tracking-wide uppercase">Monitor and moderate community activity</p>
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-zinc-900 rounded-xl p-1 gap-1 w-fit mb-6">
+        <div className="flex bg-[#111111] p-1.5 rounded-full border border-white/5 w-fit mb-6 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]">
           {(['messages', 'users'] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)}
-              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${tab === t ? 'bg-red-600 text-white' : 'text-zinc-400 hover:text-white'}`}
+              className={`px-6 py-2.5 rounded-full text-xs font-black transition-all uppercase tracking-wider ${tab === t ? 'bg-orange-500 text-white shadow-[0_5px_15px_rgba(255,107,0,0.3)]' : 'text-zinc-500 hover:text-white hover:bg-white/5'}`}
             >
               {t === 'messages' ? '🚩 Flagged Messages' : '⚠️ Warned Users'}
             </button>
@@ -86,7 +86,7 @@ export default function AdminPanel() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-20"><Loader2 className="h-8 w-8 animate-spin text-red-400" /></div>
+          <div className="flex justify-center py-20"><Loader2 className="h-8 w-8 animate-spin text-orange-500" /></div>
         ) : tab === 'messages' ? (
           <div className="space-y-3">
             {flaggedMessages.length === 0 ? (
@@ -96,7 +96,7 @@ export default function AdminPanel() {
               </div>
             ) : flaggedMessages.map((msg, i) => (
               <motion.div key={msg.id} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}
-                className="bg-zinc-900/80 border border-red-500/20 rounded-xl p-4 flex items-start justify-between gap-4"
+                className="bg-[#111] border border-red-500/20 rounded-xl p-5 flex items-start justify-between gap-4 hover:border-red-500/40 transition-colors"
               >
                 <div className="flex items-start gap-3 flex-1 min-w-0">
                   <AlertTriangle className="h-5 w-5 text-amber-400 mt-0.5 shrink-0" />
@@ -129,7 +129,7 @@ export default function AdminPanel() {
               </div>
             ) : warnedUsers.map((u, i) => (
               <motion.div key={u.id} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}
-                className={`bg-zinc-900/80 border rounded-xl p-4 flex items-center justify-between gap-4 ${u.is_suspended ? 'border-red-500/30' : 'border-orange-500/20'}`}
+                className={`bg-[#111] border rounded-xl p-5 flex items-center justify-between gap-4 ${u.is_suspended ? 'border-red-500/30' : 'border-orange-500/20'} hover:border-opacity-60 transition-colors`}
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center font-bold text-sm">

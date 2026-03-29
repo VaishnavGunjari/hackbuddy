@@ -140,3 +140,97 @@ CREATE TABLE IF NOT EXISTS notifications (
 
 CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_is_read ON notifications(is_read);
+
+-- ─── Friends ─────────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS friends (
+    id           UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    requester_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    receiver_id  UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    status       TEXT NOT NULL DEFAULT 'pending',  -- 'pending' | 'accepted' | 'rejected'
+    created_at   TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(requester_id, receiver_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_friends_requester_id ON friends(requester_id);
+CREATE INDEX IF NOT EXISTS idx_friends_receiver_id  ON friends(receiver_id);
+
+-- ─── Friend Messages ─────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS friend_messages (
+    id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    sender_id   UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    receiver_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    content     TEXT NOT NULL,
+    created_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_friend_messages_sender_id   ON friend_messages(sender_id);
+CREATE INDEX IF NOT EXISTS idx_friend_messages_receiver_id ON friend_messages(receiver_id);
+
+-- ─── Unread Chat Indicators ──────────────────────────────────────────────────
+-- Track when a user last checked a team chat
+ALTER TABLE team_members ADD COLUMN IF NOT EXISTS last_read_at TIMESTAMPTZ DEFAULT NOW();
+
+-- Track if a direct message from a friend has been read
+ALTER TABLE friend_messages ADD COLUMN IF NOT EXISTS is_read BOOLEAN NOT NULL DEFAULT FALSE;
+
+-- ─── Profile Swipes & Matches (Tinder-style) ─────────────────────────────────
+CREATE TABLE IF NOT EXISTS user_swipes (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    target_user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    action TEXT NOT NULL,  -- 'like' | 'dislike'
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(user_id, target_user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_user_swipes_u ON user_swipes(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_swipes_target ON user_swipes(target_user_id);
+
+CREATE TABLE IF NOT EXISTS user_matches (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user1_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    user2_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(user1_id, user2_id)
+);
+
+-- ─── Profile & Cover Photos ───────────────────────────────────────────────────
+-- Add cover_url column to profiles (safe to re-run)
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS cover_url TEXT;
+
+-- ─── Supabase Storage Buckets ─────────────────────────────────────────────────
+-- Paste the block below into the Supabase SQL Editor to create buckets + policies.
+
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('avatars', 'avatars', true)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('covers', 'covers', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Public read access for both buckets
+CREATE POLICY "Public can read avatars"
+ON storage.objects FOR SELECT TO public
+USING (bucket_id = 'avatars');
+
+CREATE POLICY "Public can read covers"
+ON storage.objects FOR SELECT TO public
+USING (bucket_id = 'covers');
+
+-- Authenticated users can upload/update avatars
+CREATE POLICY "Authenticated users can upload avatars"
+ON storage.objects FOR INSERT TO authenticated
+WITH CHECK (bucket_id = 'avatars');
+
+CREATE POLICY "Authenticated users can update avatars"
+ON storage.objects FOR UPDATE TO authenticated
+USING (bucket_id = 'avatars');
+
+-- Authenticated users can upload/update covers
+CREATE POLICY "Authenticated users can upload covers"
+ON storage.objects FOR INSERT TO authenticated
+WITH CHECK (bucket_id = 'covers');
+
+CREATE POLICY "Authenticated users can update covers"
+ON storage.objects FOR UPDATE TO authenticated
+USING (bucket_id = 'covers');

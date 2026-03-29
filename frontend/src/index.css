@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 @theme {
   --color-background: hsl(var(--bg));
@@ -13,42 +14,42 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --primary: 24.6 95% 53.1%; /* Fiery Orange Primary (#ff6b00 approx) */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 24.6 95% 53.1%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --bg: 222.2 84% 4.9%;
-    --fg: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --bg: 0 0% 0%; /* Pure Black */
+    --fg: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 24.6 95% 53.1%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 24.6 95% 53.1%;
   }
 
   * {
@@ -56,7 +57,85 @@
   }
 
   body {
-    background-color: hsl(var(--bg));
-    color: hsl(var(--fg));
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
   }
 }
+
+/* ── Global Backgrounds ─────────────────────────────────────── */
+.premium-bg {
+  background-color: #000000;
+  /* Very subtle dark grain or mesh could go here, keeping it pure black for now */
+}
+
+/* ── Premium Surface Cards ──────────────────────────────────── */
+/* Ultra-dark gray with a subtle top border highlight */
+.surface-card {
+  background: linear-gradient(180deg, #111111 0%, #0a0a0a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease-out;
+}
+
+.surface-hover:hover {
+  background: linear-gradient(180deg, #161616 0%, #0c0c0c 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px -10px rgba(255, 107, 0, 0.05); /* very faint orange glow shadow */
+}
+
+/* ── Orange Glows & Accents ─────────────────────────────────── */
+.glow-orange {
+  box-shadow: 0 0 40px rgba(255, 107, 0, 0.3), 0 0 80px rgba(255, 107, 0, 0.1);
+}
+.glow-sm-orange {
+  box-shadow: 0 0 15px rgba(255, 107, 0, 0.25);
+}
+
+.text-orange-glow {
+  color: #ff6b00;
+  text-shadow: 0 0 20px rgba(255, 107, 0, 0.4);
+}
+
+.bg-orange-gradient {
+  background: linear-gradient(135deg, #ff8a00, #e52e71);
+}
+
+/* ── Navigation Pill ────────────────────────────────────────── */
+.nav-pill {
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+}
+
+/* ── Glowing Buttons ────────────────────────────────────────── */
+.btn-primary {
+  background: #ff6b00;
+  color: white;
+  border-radius: 9999px; /* Pill shape */
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), 0 0 20px rgba(255, 107, 0, 0.2);
+}
+.btn-primary:hover {
+  background: #ff7f24;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 0 30px rgba(255, 107, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+/* ── Horizon Glow (for Hero section) ────────────────────────── */
+/* Represents the massive underlying planet horizon glow */
+.horizon-glow {
+  background: radial-gradient(ellipse at bottom, rgba(255, 107, 0, 0.25) 0%, rgba(20, 10, 5, 0) 70%);
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #000000; }
+::-webkit-scrollbar-thumb { background: #222222; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #444444; }

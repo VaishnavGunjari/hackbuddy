@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from app.routers import auth, users, teams, chat, hackathons, admin, matches, notifications
+from app.routers import auth, users, teams, chat, hackathons, admin, matches, notifications, friends
 
 app = FastAPI(
     title="HackMate API",
@@ -40,6 +40,7 @@ app.include_router(hackathons.router)
 app.include_router(admin.router)
 app.include_router(matches.router)
 app.include_router(notifications.router)
+app.include_router(friends.router)
 
 
 @app.get("/", tags=["Health"])

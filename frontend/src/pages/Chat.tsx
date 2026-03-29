@@ -443,7 +443,7 @@ export default function Chat() {
                 ) : (
                     <>
                         {/* Chat Header */}
-                        <div className="h-[72px] border-b border-white/5 flex items-center px-6 bg-[#050505]/90 backdrop-blur-md gap-4 shrink-0 shadow-sm relative z-10">
+                        <div className="h-[72px] border-b border-white/5 flex items-center pl-6 pr-24 bg-[#050505]/90 backdrop-blur-md gap-4 shrink-0 shadow-sm relative z-10">
                             <div className={`w-12 h-12 rounded-full flex items-center justify-center font-black text-lg relative shrink-0 border ${active.mode === 'team' ? 'bg-[#111] border-white/10 text-white' : 'bg-[#111] border-white/10 text-orange-500'}`}>
                                 {active.letter}
                                 {active.mode === 'dm' && (

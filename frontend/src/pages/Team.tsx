@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { teamsApi, notificationsApi, type Team, type UserProfile, type JoinRequest } from '../lib/api';
 import { motion } from 'framer-motion';
-import { Users, MessageSquare, Sparkles, Loader2, CheckCircle, XCircle, Crown, User as UserIcon, Trash2, UserPlus, Check } from 'lucide-react';
+import { Users, MessageSquare, Sparkles, Loader2, CheckCircle, XCircle, Crown, User as UserIcon, Trash2, UserPlus, Check, LogOut } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import ProfileModal from '../components/ProfileModal';
 
@@ -23,6 +23,7 @@ export default function TeamDetail() {
   const [declineLoading, setDeclineLoading] = useState(false);
   const [hasInvite, setHasInvite] = useState(false);
   const [inviteId, setInviteId] = useState<string | null>(null);
+  const [leaveLoading, setLeaveLoading] = useState(false);
 
   const isLeader = team?.members?.some((m) => m.role === 'leader' && m.profiles?.id === user?.id);
   const isMember = team?.members?.some((m) => m.profiles?.id === user?.id);
@@ -94,6 +95,20 @@ export default function TeamDetail() {
     } catch (err) {
       console.error(err);
       setDeleteLoading(false);
+    }
+  };
+
+  const handleLeaveTeam = async () => {
+    if (!id || !window.confirm("Are you sure you want to leave this team? This cannot be undone.")) return;
+    setLeaveLoading(true);
+    try {
+      await teamsApi.leaveTeam(id);
+      alert('You have successfully left the team.');
+      navigate('/teams');
+    } catch (err: any) {
+      console.error(err);
+      alert(err.response?.data?.detail || err.message || 'Failed to leave team.');
+      setLeaveLoading(false);
     }
   };
 
@@ -206,6 +221,16 @@ export default function TeamDetail() {
                   >
                     {deleteLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
                     Delete Team
+                  </button>
+                )}
+                {isMember && !isLeader && (
+                  <button
+                    onClick={handleLeaveTeam}
+                    disabled={leaveLoading}
+                    className="flex items-center gap-2 px-5 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-white/5 hover:border-white/20 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50"
+                  >
+                    {leaveLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}
+                    Leave Team
                   </button>
                 )}
                 {!isMember && hasInvite && (

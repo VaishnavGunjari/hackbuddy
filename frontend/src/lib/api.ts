@@ -87,6 +87,7 @@ export const teamsApi = {
   suggestMembers: (teamId: string) => request<UserProfile[]>('GET', `/teams/${teamId}/suggest-members`),
   inviteMember: (teamId: string, targetUserId: string) => request('POST', `/teams/${teamId}/invite`, { target_user_id: targetUserId }),
   acceptInvite: (teamId: string) => request('POST', `/teams/${teamId}/accept-invite`),
+  leaveTeam: (teamId: string) => request<{ message: string }>('POST', `/teams/${teamId}/leave`),
 };
 
 // ─── Matches ──────────────────────────────────────────────────────────────────

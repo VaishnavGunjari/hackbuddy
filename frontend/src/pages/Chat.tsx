@@ -519,10 +519,13 @@ export default function Chat() {
                                                         <p className="text-[10px] font-bold text-zinc-500 mb-1.5 ml-1 uppercase tracking-wider">{msg.sender_name}</p>
                                                     )}
                                                     <div className={`px-5 py-3 rounded-[24px] text-[15px] leading-relaxed font-medium shadow-sm
-                                                        ${isMe 
-                                                            ? 'bg-orange-600 text-white rounded-br-sm shadow-[0_5px_15px_rgba(255,107,0,0.15)]' 
-                                                            : 'bg-[#111] text-zinc-100 rounded-bl-sm border border-white/5'}
-                                                        ${msg.is_flagged ? 'opacity-50' : ''}`}
+                                                        ${isMe ? 'rounded-br-sm' : 'rounded-bl-sm'}
+                                                        ${msg.is_flagged 
+                                                            ? 'bg-red-500/10 border border-red-500/20' 
+                                                            : isMe 
+                                                                ? 'bg-orange-600 text-white shadow-[0_5px_15px_rgba(255,107,0,0.15)]' 
+                                                                : 'bg-[#111] text-zinc-100 border border-white/5'
+                                                        }`}
                                                         style={{wordBreak: 'break-word'}}
                                                     >
                                                         {msg.is_flagged ? (

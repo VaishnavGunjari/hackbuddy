@@ -1,16 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Code2, Heart, MessageSquare, Zap, Users, ChevronRight, Globe, Shield, LayoutGrid, ChevronDown, UserPlus, Cpu, Rocket } from 'lucide-react';
+import { Zap, ChevronDown, UserPlus, Cpu, Rocket } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Landing() {
-    const { user, logout } = useAuth();
-    const navigate = useNavigate();
-
-    const handleSignOut = () => {
-        logout();
-        navigate('/');
-    };
+    const { user } = useAuth();
 
     return (
         <div className="min-h-screen premium-bg text-white selection:bg-orange-500/30 overflow-x-hidden">

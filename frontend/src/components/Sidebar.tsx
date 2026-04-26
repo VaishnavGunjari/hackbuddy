@@ -5,7 +5,6 @@ import {
     MessageSquare,
     Zap,
     LogOut,
-    Code2,
     User,
     Search,
     Shield,

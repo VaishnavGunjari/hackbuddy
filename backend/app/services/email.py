@@ -1,5 +1,5 @@
 """
-Email notification service for HackMate.
+Email notification service for Haxion.
 Uses Python's built-in smtplib with SMTP_SSL for sending emails.
 """
 import smtplib
@@ -31,7 +31,7 @@ def send_email_notification(to_email: str, subject: str, body: str) -> bool:
     try:
         msg = MIMEMultipart("alternative")
         msg["Subject"] = subject
-        msg["From"] = f"HackMate <{FROM_EMAIL}>"
+        msg["From"] = f"Haxion <{FROM_EMAIL}>"
         msg["To"] = to_email
 
         # Plain text part
@@ -41,10 +41,10 @@ def send_email_notification(to_email: str, subject: str, body: str) -> bool:
         html_part = MIMEText(
             f"""
             <html><body style="font-family: Arial, sans-serif; padding: 20px; background:#0a0a0a; color:#eee">
-            <h2 style="color:#a855f7">🚀 HackMate</h2>
+            <h2 style="color:#a855f7">🚀 Haxion</h2>
             <p>{html_body}</p>
             <hr style="border-color:#333; margin:20px 0">
-            <p style="font-size:12px; color:#555">You're receiving this because you're a HackMate member.</p>
+            <p style="font-size:12px; color:#555">You're receiving this because you're a Haxion member.</p>
             </body></html>
             """,
             "html"

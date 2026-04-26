@@ -1,5 +1,5 @@
 """
-Database connection setup for HackMate.
+Database connection setup for Haxion.
 Uses Supabase (PostgreSQL) via the supabase-py client for direct DB queries.
 """
 import os

@@ -1,5 +1,5 @@
 """
-ML-based content moderation service for HackMate.
+ML-based content moderation service for Haxion.
 Uses scikit-learn TF-IDF + Logistic Regression trained on a lightweight
 rule-based labeled dataset of toxic/spam text patterns.
 """

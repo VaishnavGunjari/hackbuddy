@@ -146,7 +146,7 @@ export default function Notifications() {
         if (ids.length === 0) return;
 
         const BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-        const token = localStorage.getItem('hackmate_token');
+        const token = localStorage.getItem('haxion_token');
 
         const results = await Promise.allSettled(
             ids.map((id) =>

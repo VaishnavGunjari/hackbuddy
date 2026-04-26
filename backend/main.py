@@ -1,5 +1,5 @@
 """
-HackMate API – FastAPI entry point.
+Haxion API – FastAPI entry point.
 Registers all routers and configures CORS.
 """
 from fastapi import FastAPI
@@ -11,8 +11,8 @@ load_dotenv()
 from app.routers import auth, users, teams, chat, hackathons, admin, matches, notifications, friends
 
 app = FastAPI(
-    title="HackMate API",
-    description="Backend for HackMate – Find Your Perfect Hackathon Team",
+    title="Haxion API",
+    description="Backend for Haxion – Find Your Perfect Hackathon Team",
     version="1.0.0",
 )
 
@@ -45,7 +45,7 @@ app.include_router(friends.router)
 
 @app.get("/", tags=["Health"])
 def root():
-    return {"message": "Welcome to HackMate API 🚀", "docs": "/docs"}
+    return {"message": "Welcome to Haxion API 🚀", "docs": "/docs"}
 
 @app.get("/health", tags=["Health"])
 def health_check():

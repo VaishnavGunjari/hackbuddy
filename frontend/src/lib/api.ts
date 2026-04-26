@@ -1,12 +1,12 @@
 /**
- * Centralized API client for HackMate backend (FastAPI).
+ * Centralized API client for Haxion backend (FastAPI).
  * All requests include the JWT token from localStorage.
  */
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function getToken(): string | null {
-  return localStorage.getItem('hackmate_token');
+  return localStorage.getItem('haxion_token');
 }
 
 async function request<T>(

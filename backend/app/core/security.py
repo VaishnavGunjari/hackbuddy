@@ -1,5 +1,5 @@
 """
-JWT and password hashing utilities for HackMate authentication.
+JWT and password hashing utilities for Haxion authentication.
 """
 import os
 from datetime import datetime, timedelta, timezone
@@ -10,7 +10,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
 # ─── Configuration ────────────────────────────────────────────────────────────
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "hackmate-super-secret-key-change-in-prod")
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "haxion-super-secret-key-change-in-prod")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours
 

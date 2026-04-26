@@ -12,7 +12,7 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-const TOKEN_KEY = 'hackmate_token';
+const TOKEN_KEY = 'haxion_token';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserProfile | null>(null);

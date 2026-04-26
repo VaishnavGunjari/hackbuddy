@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Code2, Heart, MessageSquare, Zap, Users, ChevronRight, Globe, Shield, LayoutGrid } from 'lucide-react';
+import { Code2, Heart, MessageSquare, Zap, Users, ChevronRight, Globe, Shield, LayoutGrid, ChevronDown, UserPlus, Cpu, Rocket } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Landing() {
@@ -19,23 +19,42 @@ export default function Landing() {
             <div className="absolute top-[-400px] left-1/2 -translate-x-1/2 w-[140%] h-[800px] horizon-glow rounded-[100%] pointer-events-none opacity-80" />
 
             {/* Navigation */}
-            <nav className="fixed top-8 w-full z-50 flex justify-center px-6 pointer-events-none">
-                <div className="nav-pill px-6 py-3 flex items-center justify-between gap-12 pointer-events-auto">
-                    <Link to="/" className="flex items-center gap-2 group">
-                        <div className="text-orange-500 px-1 py-0.5 rounded shadow-sm shadow-orange-500/20 bg-orange-500/10">
-                            <Code2 className="h-4 w-4" />
-                        </div>
-                        <span className="font-bold tracking-tight text-white group-hover:text-orange-400 transition-colors">HackMate</span>
+            <nav className="fixed top-8 w-full z-50 px-8 pointer-events-none">
+                <div className="max-w-7xl mx-auto flex items-center justify-between relative">
+                    {/* Logo (Left Side) */}
+                    <Link to="/" className="flex items-center gap-3 group pointer-events-auto">
+                        <motion.img 
+                            src="/logo.png" 
+                            alt="Haxion Logo" 
+                            className="h-8 object-contain"
+                            animate={{ 
+                                y: [-1, 1, -1],
+                                filter: [
+                                    "drop-shadow(0px 0px 2px rgba(0,255,255,0.4))", 
+                                    "drop-shadow(0px 0px 8px rgba(0,255,255,0.8))", 
+                                    "drop-shadow(0px 0px 2px rgba(0,255,255,0.4))"
+                                ]
+                            }}
+                            transition={{ 
+                                duration: 3, 
+                                repeat: Infinity, 
+                                ease: "easeInOut" 
+                            }}
+                        />
+                        <span className="font-bold tracking-tight text-white group-hover:text-orange-400 transition-colors text-xl">Haxion</span>
                     </Link>
 
-                    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-                        <a href="#features" className="hover:text-white transition-colors">Features</a>
-                        <a href="#how-it-works" className="hover:text-white transition-colors">Match Advantage</a>
-                        <a href="#stories" className="hover:text-white transition-colors">Stories</a>
-                        <a href="#" className="hover:text-white transition-colors">FAQ</a>
+                    {/* Center Nav Pill */}
+                    <div className="absolute left-1/2 -translate-x-1/2 nav-pill px-6 py-3 flex items-center gap-8 pointer-events-auto">
+                        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+                            <a href="#features" className="hover:text-white transition-colors">Features</a>
+                            <a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a>
+                            <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
+                        </div>
                     </div>
 
-                    <div className="flex items-center">
+                    {/* Right Side Buttons */}
+                    <div className="flex items-center pointer-events-auto">
                         {user ? (
                             <Link to="/dashboard">
                                 <button className="btn-primary px-6 py-2 text-sm font-bold shadow-lg shadow-orange-500/20">
@@ -63,7 +82,7 @@ export default function Landing() {
                         transition={{ duration: 0.6, ease: "easeOut" }}
                         className="text-6xl md:text-[5.5rem] leading-[1.1] font-bold tracking-tight mb-8 text-white"
                     >
-                        <span className="text-orange-glow">HackMate</span> Build Smarter,<br className="hidden md:block" />
+                        <span className="text-orange-glow">Haxion</span> Build Smarter,<br className="hidden md:block" />
                         Faster, Better.
                     </motion.h1>
 
@@ -73,7 +92,7 @@ export default function Landing() {
                         transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
                         className="text-lg md:text-xl text-zinc-400 max-w-3xl mx-auto mb-10 leading-relaxed font-medium"
                     >
-                        The first fully integrated developer matching experience. No spam, no delays — HackMate empowers you to build with top-tier talent from global hackathons entirely autonomously.
+                        The first fully integrated developer matching experience. No spam, no delays — Haxion empowers you to build with top-tier talent from global hackathons entirely autonomously.
                     </motion.p>
 
                     <motion.div
@@ -123,22 +142,22 @@ export default function Landing() {
                                 <div className="p-8 grid grid-cols-3 gap-6 opacity-80">
                                     <div className="col-span-2 h-48 bg-[#0c0c0c] rounded-xl border border-white/5 overflow-hidden p-6 relative">
                                         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-orange-500/10 to-transparent" />
-                                        <div className="text-xs text-zinc-500 font-medium mb-1 uppercase tracking-wider">Active Teams Formed</div>
-                                        <div className="text-4xl font-bold text-white mb-2">32,402</div>
-                                        <div className="text-xs text-green-500">↑ 11% Since last month</div>
+                                        <div className="text-xs text-zinc-500 font-medium mb-1 uppercase tracking-wider">Platform Status</div>
+                                        <div className="text-4xl font-bold text-white mb-2">Beta Live</div>
+                                        <div className="text-xs text-orange-500">Early access open to all developers</div>
                                     </div>
                                     <div className="h-48 bg-[#0c0c0c] rounded-xl border border-white/5 p-6 flex flex-col justify-between">
                                         <div>
-                                            <div className="text-xs text-zinc-500 font-medium mb-1 uppercase tracking-wider">Success Rate</div>
-                                            <div className="text-4xl font-bold text-white">98.4%</div>
+                                            <div className="text-xs text-zinc-500 font-medium mb-1 uppercase tracking-wider">Matching Engine</div>
+                                            <div className="text-4xl font-bold text-white">Active</div>
                                         </div>
-                                        <div className="h-2 w-full bg-[#161616] rounded-full overflow-hidden">
-                                            <div className="h-full bg-orange-500 w-[98%]" />
+                                        <div className="h-2 w-full bg-[#161616] rounded-full overflow-hidden relative">
+                                            <div className="absolute top-0 left-0 h-full bg-orange-500 w-full animate-pulse" />
                                         </div>
                                     </div>
-                                    <div className="h-32 bg-[#0c0c0c] rounded-xl border border-white/5" />
-                                    <div className="h-32 bg-[#0c0c0c] rounded-xl border border-white/5" />
-                                    <div className="h-32 bg-[#0c0c0c] rounded-xl border border-white/5" />
+                                    <div className="h-32 bg-[#0c0c0c] rounded-xl border border-white/5 flex items-center justify-center text-zinc-600 text-sm font-medium">Auto-Matching</div>
+                                    <div className="h-32 bg-[#0c0c0c] rounded-xl border border-white/5 flex items-center justify-center text-zinc-600 text-sm font-medium">Skill Validation</div>
+                                    <div className="h-32 bg-[#0c0c0c] rounded-xl border border-white/5 flex items-center justify-center text-zinc-600 text-sm font-medium">Team Chat</div>
                                 </div>
                             </div>
                         </div>
@@ -152,13 +171,13 @@ export default function Landing() {
                 <div className="container mx-auto px-6 max-w-6xl">
                     <div className="text-center mb-16">
                         <div className="inline-block px-4 py-1.5 rounded-full border border-orange-500/30 text-orange-500 text-xs font-bold uppercase tracking-widest mb-6 bg-orange-500/5">
-                            The HackMate Advantage
+                            The Haxion Advantage
                         </div>
                         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
                             Unlock the Full Power of <br/> Developer Synergy
                         </h2>
                         <p className="text-zinc-400 max-w-2xl mx-auto text-lg">
-                            HackMate isn't just another Discord server. It's a fundamentally new way to form teams — deeply integrated, fully autonomous, and built for speed, transparency, and shipping code.
+                            Haxion isn't just another Discord server. It's a fundamentally new way to form teams — deeply integrated, fully autonomous, and built for speed, transparency, and shipping code.
                         </p>
                     </div>
 
@@ -168,7 +187,7 @@ export default function Landing() {
                             <Zap className="h-8 w-8 text-white mb-6" />
                             <h3 className="text-xl font-bold text-white mb-3">Fastest Formation</h3>
                             <p className="text-zinc-400 text-sm leading-relaxed">
-                                No delays. HackMate analyzes your tech stack and perfectly pairs you with complementary builders in milliseconds. No middleman.
+                                No delays. Haxion analyzes your tech stack and perfectly pairs you with complementary builders in milliseconds. No middleman.
                             </p>
                         </div>
                         <div className="surface-card p-8 surface-hover group relative overflow-hidden">
@@ -191,59 +210,154 @@ export default function Landing() {
                 </div>
             </section>
 
-            {/* Testimonials / Stats Table Section */}
-            <section id="stories" className="py-24 border-y border-white/5 bg-[#050505] relative overflow-hidden">
-                <div className="absolute left-[-200px] top-1/2 -translate-y-1/2 w-96 h-96 bg-orange-600/5 blur-[120px] rounded-full pointer-events-none" />
-                <div className="container mx-auto px-6 max-w-6xl relative z-10 flex flex-col md:flex-row items-center gap-16">
-                    <div className="flex-1">
-                        <div className="inline-block px-3 py-1 rounded-full border border-orange-500/30 text-orange-500 text-[10px] font-bold uppercase tracking-widest mb-6">
-                            Referrals
-                        </div>
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white leading-tight">
-                            Build Teams. <br/> Win Prizes.
-                        </h2>
-                        <p className="text-zinc-400 text-lg mb-8 leading-relaxed">
-                            HackMate charges absolutely nothing — and connects you with top talent representing 50% of recent large hackathon winners. The faster you build your squad, the sooner you start shipping. It's simple as that. This is how power users are dominating leaderboards completely autonomously.
-                        </p>
-                        
-                        <div className="flex gap-4">
-                            <div className="surface-card px-6 py-4 rounded-2xl border-orange-500/20 shadow-[0_5px_20px_rgba(255,107,0,0.1)]">
-                                <div className="text-white font-bold mb-1">Top Rated User</div>
-                                <div className="text-orange-500 text-2xl font-black">99.8%</div>
+            {/* How it Works Section - Premium */}
+            <section id="how-it-works" className="py-32 relative overflow-hidden bg-[#020202]">
+                <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/5 blur-[120px] rounded-full pointer-events-none" />
+                
+                <div className="container mx-auto px-6 max-w-6xl relative z-10">
+                    <div className="text-center mb-24">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-xs font-bold uppercase tracking-widest mb-6"
+                        >
+                            <Zap className="w-4 h-4" /> The Haxion Flow
+                        </motion.div>
+                        <motion.h2 
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                            className="text-4xl md:text-5xl font-bold mb-6 text-white leading-tight"
+                        >
+                            From Solo to Squad <br/> in 3 Steps
+                        </motion.h2>
+                    </div>
+
+                    <div className="space-y-24 relative">
+                        {/* Connecting Line */}
+                        <div className="absolute left-1/2 top-10 bottom-10 w-px bg-gradient-to-b from-orange-500/0 via-orange-500/20 to-orange-500/0 -translate-x-1/2 hidden md:block -z-10" />
+
+                        {/* Step 1 */}
+                        <div className="flex flex-col md:flex-row items-center gap-12 group">
+                            <div className="flex-1 text-right md:pr-12 relative">
+                                <h3 className="text-3xl font-bold text-white mb-4">Craft Your Identity</h3>
+                                <p className="text-zinc-400 text-lg leading-relaxed">
+                                    Set up your developer profile in seconds. Connect your GitHub, define your tech stack, and highlight the hackathon categories you want to dominate.
+                                </p>
                             </div>
-                            <div className="surface-card px-6 py-4 rounded-2xl">
-                                <div className="text-white font-bold mb-1">Teams Actively Building</div>
-                                <div className="text-white text-2xl font-black">12.4k</div>
+                            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 flex items-center justify-center shrink-0 shadow-2xl relative z-10 group-hover:border-orange-500/50 group-hover:shadow-[0_0_30px_rgba(255,107,0,0.2)] transition-all duration-500">
+                                <UserPlus className="w-8 h-8 text-orange-500" />
+                                <div className="absolute -inset-4 bg-orange-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            </div>
+                            <div className="flex-1 md:pl-12 hidden md:block">
+                                <div className="h-32 w-full max-w-sm bg-gradient-to-r from-white/5 to-transparent rounded-2xl border border-white/5 opacity-40 group-hover:opacity-100 transition-opacity duration-500 flex items-center px-6">
+                                    <div className="w-full space-y-3">
+                                        <div className="h-3 w-3/4 bg-white/10 rounded" />
+                                        <div className="h-3 w-1/2 bg-white/10 rounded" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Step 2 */}
+                        <div className="flex flex-col md:flex-row-reverse items-center gap-12 group">
+                            <div className="flex-1 text-left md:pl-12 relative">
+                                <h3 className="text-3xl font-bold text-white mb-4">Algorithmic Matching</h3>
+                                <p className="text-zinc-400 text-lg leading-relaxed">
+                                    No more scrolling through endless Discord channels. Our proprietary matching engine pairs you with highly complementary developers based on skills, timezone, and project goals.
+                                </p>
+                            </div>
+                            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 flex items-center justify-center shrink-0 shadow-2xl relative z-10 group-hover:border-orange-500/50 group-hover:shadow-[0_0_30px_rgba(255,107,0,0.2)] transition-all duration-500">
+                                <Cpu className="w-8 h-8 text-orange-500" />
+                                <div className="absolute -inset-4 bg-orange-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            </div>
+                            <div className="flex-1 md:pr-12 hidden md:block flex justify-end">
+                                <div className="h-32 w-full max-w-sm bg-gradient-to-l from-white/5 to-transparent rounded-2xl border border-white/5 opacity-40 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-end px-6 ml-auto">
+                                    <div className="w-full space-y-3 flex flex-col items-end">
+                                        <div className="h-3 w-full bg-orange-500/20 rounded" />
+                                        <div className="h-3 w-3/4 bg-white/10 rounded" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Step 3 */}
+                        <div className="flex flex-col md:flex-row items-center gap-12 group">
+                            <div className="flex-1 text-right md:pr-12 relative">
+                                <h3 className="text-3xl font-bold text-white mb-4">Ship Code Faster</h3>
+                                <p className="text-zinc-400 text-lg leading-relaxed">
+                                    Jump straight into a dedicated team workspace. With integrated chat and seamless connection to your project repos, you can focus 100% on building and winning.
+                                </p>
+                            </div>
+                            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 flex items-center justify-center shrink-0 shadow-2xl relative z-10 group-hover:border-orange-500/50 group-hover:shadow-[0_0_30px_rgba(255,107,0,0.2)] transition-all duration-500">
+                                <Rocket className="w-8 h-8 text-orange-500" />
+                                <div className="absolute -inset-4 bg-orange-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            </div>
+                            <div className="flex-1 md:pl-12 hidden md:block">
+                                <div className="h-32 w-full max-w-sm bg-gradient-to-r from-white/5 to-transparent rounded-2xl border border-white/5 opacity-40 group-hover:opacity-100 transition-opacity duration-500 flex items-center px-6">
+                                     <div className="w-full space-y-4">
+                                        <div className="flex gap-2">
+                                            <div className="w-6 h-6 rounded-full bg-white/10" />
+                                            <div className="h-6 w-1/2 bg-white/10 rounded-full" />
+                                        </div>
+                                        <div className="flex gap-2 justify-end">
+                                            <div className="h-6 w-3/4 bg-orange-500/20 rounded-full" />
+                                            <div className="w-6 h-6 rounded-full bg-white/10" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div className="flex-1 w-full">
-                        <div className="surface-card rounded-2xl overflow-hidden border border-white/10 p-2">
-                           <div className="bg-[#0a0a0a] rounded-xl border border-white/5">
-                                <div className="px-6 py-4 border-b border-white/5 flex justify-between items-center text-xs text-zinc-500 font-medium uppercase">
-                                    <span>Top Users</span>
-                                    <span>Role</span>
-                                    <span>Win Velocity</span>
+                </div>
+            </section>
+
+            {/* FAQ Section */}
+            <section id="faq" className="py-24 relative overflow-hidden bg-[#050505] border-t border-white/5">
+                <div className="container mx-auto px-6 max-w-3xl relative z-10">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl font-bold mb-6 text-white">Frequently Asked Questions</h2>
+                        <p className="text-zinc-400 text-lg">Everything you need to know about joining the Haxion beta.</p>
+                    </div>
+
+                    <div className="space-y-4">
+                        {[
+                            {
+                                q: "Is Haxion free to use?",
+                                a: "Yes! During our beta phase, Haxion is completely free for all developers. We want to build the best matching experience possible before thinking about monetization."
+                            },
+                            {
+                                q: "How does the matching algorithm work?",
+                                a: "Our engine analyzes your tech stack (frontend, backend, design, etc.), your timezone, and your experience level to pair you with users who perfectly complement your skills so you have a well-rounded team."
+                            },
+                            {
+                                q: "Can I join if I already have a team?",
+                                a: "Absolutely. If you have a partial team and just need a specific role (like a UI Designer or a Smart Contract Dev), you can specify exactly who you're looking for."
+                            },
+                            {
+                                q: "Do I need a project idea to join?",
+                                a: "Not at all. Many teams form around shared interests or technologies and brainstorm together. You can also join a team that already has a solid pitch."
+                            },
+                            {
+                                q: "What happens after we match?",
+                                a: "Once matched, you'll instantly get access to a private team workspace with real-time chat, where you can introduce yourselves and start building right away."
+                            }
+                        ].map((faq, i) => (
+                            <details key={i} className="group bg-[#0a0a0a] border border-white/5 rounded-2xl overflow-hidden open:border-orange-500/30 transition-colors duration-300">
+                                <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-white text-lg hover:text-orange-400 transition-colors [&::-webkit-details-marker]:hidden">
+                                    {faq.q}
+                                    <span className="transition-transform duration-300 group-open:rotate-180">
+                                        <ChevronDown className="w-5 h-5 text-zinc-500 group-hover:text-orange-500" />
+                                    </span>
+                                </summary>
+                                <div className="px-6 pb-6 text-zinc-400 leading-relaxed opacity-0 group-open:animate-fadeIn">
+                                    {faq.a}
                                 </div>
-                                {[ 
-                                  { n: '#001', h: 'xOx1...2a', r: 'Full Stack', v: '99%' },
-                                  { n: '#002', h: 'Alx...bQ', r: 'Frontend', v: '95%' },
-                                  { n: '#003', h: 'B0x...9m', r: 'Backend', v: '88%' },
-                                  { n: '#004', h: 'Y0m...21', r: 'Designer', v: '85%' },
-                                ].map((row, i) => (
-                                    <div key={i} className={`flex justify-between items-center px-6 py-4 text-sm ${i !== 3 ? 'border-b border-white/5' : ''}`}>
-                                        <div className="text-zinc-500">{row.n}</div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-5 h-5 rounded-full bg-zinc-800" />
-                                            <span className="text-zinc-300 font-medium">{row.h}</span>
-                                        </div>
-                                        <div className="text-zinc-500">{row.r}</div>
-                                        <div className="font-bold text-orange-500">{row.v}</div>
-                                    </div>
-                                ))}
-                           </div>
-                        </div>
+                            </details>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -252,17 +366,13 @@ export default function Landing() {
             <footer className="border-t border-white/5 py-12 bg-[#000000]">
                 <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-zinc-500 text-sm">
                     <div className="flex items-center gap-2 mb-4 md:mb-0">
-                        <div className="h-6 w-6 rounded border border-white/10 flex items-center justify-center bg-[#111]">
-                            <Code2 className="h-3 w-3 text-white" />
-                        </div>
-                        <span className="font-semibold text-zinc-300 tracking-wide">HackMate</span>
+                        <img src="/logo.png" alt="Haxion" className="h-6 object-contain opacity-70 hover:opacity-100 transition-opacity" />
                     </div>
                     <div className="flex gap-8 font-medium">
                         <a href="#" className="hover:text-white transition-colors">Platform</a>
-                        <a href="#" className="hover:text-white transition-colors">Documentation</a>
-                        <a href="#" className="hover:text-white transition-colors">Discord</a>
+                        <a href="https://discord.gg/QsPWPztx8" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Discord</a>
                     </div>
-                    <p className="mt-4 md:mt-0 font-medium">&copy; 2026 HackMate Protocol Ltd.</p>
+                    <p className="mt-4 md:mt-0 font-medium">&copy; 2026 Haxion Protocol Ltd.</p>
                 </div>
             </footer>
         </div>

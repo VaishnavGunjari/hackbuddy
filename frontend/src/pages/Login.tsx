@@ -54,7 +54,7 @@ export default function Login() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
               <Zap className="h-5 w-5 text-white" />
             </div>
-            <span className="text-2xl font-bold">HackMate</span>
+            <span className="text-2xl font-bold">Haxion</span>
           </Link>
           <p className="text-zinc-400 mt-2 text-sm">Find your perfect hackathon team</p>
         </div>

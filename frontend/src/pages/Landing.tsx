@@ -1,6 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Zap, ChevronDown, UserPlus, Cpu, Rocket } from 'lucide-react';
+import { Zap, ChevronDown, UserPlus, Cpu, Rocket, Code2, Shield, Users } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Landing() {

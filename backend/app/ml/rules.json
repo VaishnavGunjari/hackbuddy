@@ -1,0 +1,21 @@
+[
+    {
+        "conditions": {
+            "skill_level": "beginner"
+        },
+        "suggestion": "Start with easy beginner-friendly projects like simple CRUD apps or basic UI clones."
+    },
+    {
+        "conditions": {
+            "preferred_domain": "AI"
+        },
+        "suggestion": "Explore machine learning libraries like Scikit-Learn or PyTorch to build basic prediction models."
+    },
+    {
+        "conditions": {
+            "skill_level": "advanced",
+            "preferred_domain": "Web"
+        },
+        "suggestion": "Look into scalable microservices architectures and serverless deployments with Next.js."
+    }
+]

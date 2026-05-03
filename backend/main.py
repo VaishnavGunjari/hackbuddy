@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from app.routers import auth, users, teams, chat, hackathons, admin, matches, notifications, friends
+from app.routers import auth, users, teams, chat, hackathons, admin, matches, notifications, friends, ml
 
 app = FastAPI(
     title="Haxion API",
@@ -42,6 +42,7 @@ app.include_router(admin.router)
 app.include_router(matches.router)
 app.include_router(notifications.router)
 app.include_router(friends.router)
+app.include_router(ml.router, prefix="/ml", tags=["Machine Learning"])
 
 
 @app.get("/", tags=["Health"])

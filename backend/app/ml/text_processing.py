@@ -19,10 +19,10 @@ stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
 
 def clean_and_preprocess(text: str) -> str:
-    \"\"\"
+    """
     Cleans text by removing special characters, lowercasing,
     tokenizing, removing stopwords, and lemmatizing.
-    \"\"\"
+    """
     if not text:
         return ""
         
@@ -45,15 +45,15 @@ def clean_and_preprocess(text: str) -> str:
     return " ".join(processed_tokens)
 
 def train_tfidf(corpus: list[str]) -> TfidfVectorizer:
-    \"\"\"
+    """
     Trains and returns a TF-IDF vectorizer on the given corpus.
-    \"\"\"
+    """
     vectorizer = TfidfVectorizer()
     vectorizer.fit(corpus)
     return vectorizer
 
 def vectorize_texts(texts: list[str], vectorizer: TfidfVectorizer):
-    \"\"\"
+    """
     Vectorizes a list of strings using the provided vectorizer.
-    \"\"\"
+    """
     return vectorizer.transform(texts)

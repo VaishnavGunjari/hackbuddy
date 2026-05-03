@@ -80,7 +80,7 @@ export default function Chat() {
         try {
             const BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
             const res = await fetch(`${BASE}/chat/unread-count`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('haxion_token')}` },
+                headers: { Authorization: `Bearer ${localStorage.getItem('hackbuddy_token')}` },
             });
             if (res.ok) {
                 const data = await res.json();
@@ -168,7 +168,7 @@ export default function Chat() {
             } else {
                 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
                 const res = await fetch(`${BASE}/friends/${active.id}/messages`, {
-                    headers: { Authorization: `Bearer ${localStorage.getItem('haxion_token')}` },
+                    headers: { Authorization: `Bearer ${localStorage.getItem('hackbuddy_token')}` },
                 });
                 const data = await res.json();
                 setDmMessages(Array.isArray(data) ? data : []);
@@ -240,7 +240,7 @@ export default function Chat() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem('haxion_token')}`,
+                        Authorization: `Bearer ${localStorage.getItem('hackbuddy_token')}`,
                     },
                     body: JSON.stringify({ receiver_id: active.id, content }),
                 });

@@ -1,5 +1,5 @@
 """
-Haxion API – FastAPI entry point.
+Hackbuddy API – FastAPI entry point.
 Registers all routers and configures CORS.
 """
 from fastapi import FastAPI
@@ -11,8 +11,8 @@ load_dotenv()
 from app.routers import auth, users, teams, chat, hackathons, admin, matches, notifications, friends, ml
 
 app = FastAPI(
-    title="Haxion API",
-    description="Backend for Haxion – Find Your Perfect Hackathon Team",
+    title="Hackbuddy API",
+    description="Backend for Hackbuddy – Find Your Perfect Hackathon Team",
     version="1.0.0",
 )
 
@@ -47,7 +47,7 @@ app.include_router(ml.router, prefix="/ml", tags=["Machine Learning"])
 
 @app.get("/", tags=["Health"])
 def root():
-    return {"message": "Welcome to Haxion API 🚀", "docs": "/docs"}
+    return {"message": "Welcome to Hackbuddy API 🚀", "docs": "/docs"}
 
 @app.get("/health", tags=["Health"])
 def health_check():

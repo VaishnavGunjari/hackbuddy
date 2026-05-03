@@ -1,5 +1,5 @@
 """
-ML-based content moderation service for Haxion.
+ML-based content moderation service for Hackbuddy.
 Uses scikit-learn TF-IDF + Logistic Regression trained on a lightweight
 rule-based labeled dataset of toxic/spam text patterns.
 """
@@ -42,44 +42,24 @@ def _build_ml_model():
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.linear_model import LogisticRegression
 
-    # Seed training data - clean (0) vs toxic/spam (1)
-    texts = [
-        # Clean
-        "Hey team, great work on the project!",
-        "Can we sync up tomorrow at 10 AM?",
-        "I'll handle the backend API, someone take frontend?",
-        "Looking for a team for the next hackathon",
-        "Does anyone know React well enough to build the UI?",
-        "Let's push the code to GitHub tonight",
-        "I have experience with machine learning models",
-        "Hello everyone, excited to join the team!",
-        "Anyone familiar with FastAPI?",
-        "Great idea, let's implement it",
-        "I can help with the database design",
-        "What time is the kickoff meeting?",
-        "Thanks for sharing the repository link",
-        "Let me know if you need help with testing",
-        "Just pushed my changes to the main branch",
-        # Toxic
-        "you idiot stop sending stupid messages",
-        "this is trash code written by a moron",
-        "I hate you, you loser",
-        "kill yourself you garbage human",
-        "you are so dumb and stupid",
-        # Spam
-        "Buy now limited offer free money click here",
-        "Earn $500 a day from home act now",
-        "Spam advertisement click here for free",
-        "Buy cryptocurrency earn unlimited money",
-        "Click this link earn free rewards now",
-        # Profanity
-        "what the fuck is wrong with this code",
-        "this shit doesn't work you bitch",
-        "fuck this bullshit project",
-        "what a bastard ass move",
-        "damn this stupid piece of shit",
-    ]
-    labels = [0]*15 + [1]*5 + [1]*5 + [1]*5  # 0=clean, 1=toxic/spam
+    import json
+
+    dataset_path = Path(__file__).parent / "moderation_dataset.json"
+    if dataset_path.exists():
+        with open(dataset_path, "r", encoding="utf-8") as f:
+            dataset = json.load(f)
+            texts = [item["text"] for item in dataset]
+            labels = [item["label"] for item in dataset]
+    else:
+        # Seed training data fallback
+        texts = [
+            "Hey team, great work on the project!",
+            "Can we sync up tomorrow at 10 AM?",
+            "you idiot stop sending stupid messages",
+            "this is trash code written by a moron",
+            "what the fuck is wrong with this code"
+        ]
+        labels = [0, 0, 1, 1, 1]
 
     model = Pipeline([
         ("tfidf", TfidfVectorizer(ngram_range=(1, 2), max_features=5000)),

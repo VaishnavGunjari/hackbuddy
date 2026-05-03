@@ -1,5 +1,5 @@
 """
-All Pydantic schemas for request/response validation in Haxion.
+All Pydantic schemas for request/response validation in Hackbuddy.
 """
 from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional

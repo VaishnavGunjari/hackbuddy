@@ -30,7 +30,7 @@ export default function Sidebar() {
                 notificationsApi.list(),
                 fetch(
                     `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/chat/unread-count`,
-                    { headers: { Authorization: `Bearer ${localStorage.getItem('haxion_token')}` } }
+                    { headers: { Authorization: `Bearer ${localStorage.getItem('hackbuddy_token')}` } }
                 ).then(r => r.ok ? r.json() : { unread_count: 0 }),
             ]);
             setUnreadNotifCount(notifs.filter(n => !n.is_read).length);
@@ -73,9 +73,9 @@ export default function Sidebar() {
             <div className="h-24 flex items-center px-8">
                 <Link to="/" className="flex items-center gap-3 font-bold text-xl text-white hover:text-orange-500 transition-colors">
                     <div className="h-9 w-9 flex items-center justify-center rounded-lg overflow-hidden">
-                        <img src="/logo.png" alt="Haxion" className="w-full h-full object-contain" />
+                        <img src="/logo.png" alt="Hackbuddy" className="w-full h-full object-contain" />
                     </div>
-                    <span className="font-bold tracking-tight">Haxion</span>
+                    <span className="font-bold tracking-tight">Hackbuddy</span>
                 </Link>
             </div>
 

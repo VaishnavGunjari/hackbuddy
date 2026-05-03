@@ -19,7 +19,7 @@ export default function Landing() {
                     <Link to="/" className="flex items-center gap-3 group pointer-events-auto">
                         <motion.img 
                             src="/logo.png" 
-                            alt="Haxion Logo" 
+                            alt="Hackbuddy Logo" 
                             className="h-8 object-contain"
                             animate={{ 
                                 y: [-1, 1, -1],
@@ -35,7 +35,7 @@ export default function Landing() {
                                 ease: "easeInOut" 
                             }}
                         />
-                        <span className="font-bold tracking-tight text-white group-hover:text-orange-400 transition-colors text-xl">Haxion</span>
+                        <span className="font-bold tracking-tight text-white group-hover:text-orange-400 transition-colors text-xl">Hackbuddy</span>
                     </Link>
 
                     {/* Center Nav Pill */}
@@ -76,7 +76,7 @@ export default function Landing() {
                         transition={{ duration: 0.6, ease: "easeOut" }}
                         className="text-6xl md:text-[5.5rem] leading-[1.1] font-bold tracking-tight mb-8 text-white"
                     >
-                        <span className="text-orange-glow">Haxion</span> Build Smarter,<br className="hidden md:block" />
+                        <span className="text-orange-glow">Hackbuddy</span> Build Smarter,<br className="hidden md:block" />
                         Faster, Better.
                     </motion.h1>
 
@@ -86,7 +86,7 @@ export default function Landing() {
                         transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
                         className="text-lg md:text-xl text-zinc-400 max-w-3xl mx-auto mb-10 leading-relaxed font-medium"
                     >
-                        The first fully integrated developer matching experience. No spam, no delays — Haxion empowers you to build with top-tier talent from global hackathons entirely autonomously.
+                        The first fully integrated developer matching experience. No spam, no delays — Hackbuddy empowers you to build with top-tier talent from global hackathons entirely autonomously.
                     </motion.p>
 
                     <motion.div
@@ -165,13 +165,13 @@ export default function Landing() {
                 <div className="container mx-auto px-6 max-w-6xl">
                     <div className="text-center mb-16">
                         <div className="inline-block px-4 py-1.5 rounded-full border border-orange-500/30 text-orange-500 text-xs font-bold uppercase tracking-widest mb-6 bg-orange-500/5">
-                            The Haxion Advantage
+                            The Hackbuddy Advantage
                         </div>
                         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
                             Unlock the Full Power of <br/> Developer Synergy
                         </h2>
                         <p className="text-zinc-400 max-w-2xl mx-auto text-lg">
-                            Haxion isn't just another Discord server. It's a fundamentally new way to form teams — deeply integrated, fully autonomous, and built for speed, transparency, and shipping code.
+                            Hackbuddy isn't just another Discord server. It's a fundamentally new way to form teams — deeply integrated, fully autonomous, and built for speed, transparency, and shipping code.
                         </p>
                     </div>
 
@@ -181,7 +181,7 @@ export default function Landing() {
                             <Zap className="h-8 w-8 text-white mb-6" />
                             <h3 className="text-xl font-bold text-white mb-3">Fastest Formation</h3>
                             <p className="text-zinc-400 text-sm leading-relaxed">
-                                No delays. Haxion analyzes your tech stack and perfectly pairs you with complementary builders in milliseconds. No middleman.
+                                No delays. Hackbuddy analyzes your tech stack and perfectly pairs you with complementary builders in milliseconds. No middleman.
                             </p>
                         </div>
                         <div className="surface-card p-8 surface-hover group relative overflow-hidden">
@@ -217,7 +217,7 @@ export default function Landing() {
                             viewport={{ once: true }}
                             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-xs font-bold uppercase tracking-widest mb-6"
                         >
-                            <Zap className="w-4 h-4" /> The Haxion Flow
+                            <Zap className="w-4 h-4" /> The Hackbuddy Flow
                         </motion.div>
                         <motion.h2 
                             initial={{ opacity: 0, y: 20 }}
@@ -314,14 +314,14 @@ export default function Landing() {
                 <div className="container mx-auto px-6 max-w-3xl relative z-10">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl font-bold mb-6 text-white">Frequently Asked Questions</h2>
-                        <p className="text-zinc-400 text-lg">Everything you need to know about joining the Haxion beta.</p>
+                        <p className="text-zinc-400 text-lg">Everything you need to know about joining the Hackbuddy beta.</p>
                     </div>
 
                     <div className="space-y-4">
                         {[
                             {
-                                q: "Is Haxion free to use?",
-                                a: "Yes! During our beta phase, Haxion is completely free for all developers. We want to build the best matching experience possible before thinking about monetization."
+                                q: "Is Hackbuddy free to use?",
+                                a: "Yes! During our beta phase, Hackbuddy is completely free for all developers. We want to build the best matching experience possible before thinking about monetization."
                             },
                             {
                                 q: "How does the matching algorithm work?",
@@ -360,13 +360,13 @@ export default function Landing() {
             <footer className="border-t border-white/5 py-12 bg-[#000000]">
                 <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-zinc-500 text-sm">
                     <div className="flex items-center gap-2 mb-4 md:mb-0">
-                        <img src="/logo.png" alt="Haxion" className="h-6 object-contain opacity-70 hover:opacity-100 transition-opacity" />
+                        <img src="/logo.png" alt="Hackbuddy" className="h-6 object-contain opacity-70 hover:opacity-100 transition-opacity" />
                     </div>
                     <div className="flex gap-8 font-medium">
                         <a href="#" className="hover:text-white transition-colors">Platform</a>
                         <a href="https://discord.gg/QsPWPztx8" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Discord</a>
                     </div>
-                    <p className="mt-4 md:mt-0 font-medium">&copy; 2026 Haxion Protocol Ltd.</p>
+                    <p className="mt-4 md:mt-0 font-medium">&copy; 2026 Hackbuddy Protocol Ltd.</p>
                 </div>
             </footer>
         </div>

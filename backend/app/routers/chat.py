@@ -13,7 +13,7 @@ from ..services.ml_moderation import moderate_message
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
 WARNING_THRESHOLD = 3   # Warn after this many flagged messages
-SUSPEND_THRESHOLD = 6   # Suspend after this many flagged messages
+SUSPEND_THRESHOLD = 5   # Suspend after this many flagged messages
 
 
 @router.post("/messages", response_model=MessageResponse, status_code=201)

@@ -168,7 +168,7 @@ async def request_to_join(
             send_email_notification(
                 to_email=leader["email"],
                 subject=f"New Join Request for {team['name']}",
-                body=f"Hi {leader['full_name']},\n\n{requester['full_name']} has requested to join your team '{team['name']}' on Haxion.\n\nReview the request on your team dashboard."
+                body=f"Hi {leader['full_name']},\n\n{requester['full_name']} has requested to join your team '{team['name']}' on Hackbuddy.\n\nReview the request on your team dashboard."
             )
 
     return {"message": "Join request sent successfully"}
@@ -232,7 +232,7 @@ async def accept_join_request(
         send_email_notification(
             to_email=user["email"],
             subject=f"You're in! Welcome to {team_name}",
-            body=f"Hi {user['full_name']},\n\nCongratulations! Your request to join '{team_name}' has been accepted on Haxion. Time to check the team's chat!"
+            body=f"Hi {user['full_name']},\n\nCongratulations! Your request to join '{team_name}' has been accepted on Hackbuddy. Time to check the team's chat!"
         )
 
     return {"message": "Join request accepted"}
